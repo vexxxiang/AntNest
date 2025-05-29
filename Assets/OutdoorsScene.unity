@@ -408,7 +408,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &836690591
+--- !u!1 &860940705
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -416,24 +416,24 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 836690592}
+  - component: {fileID: 860940706}
   m_Layer: 0
-  m_Name: AntsParent
+  m_Name: Ants
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &836690592
+--- !u!4 &860940706
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 836690591}
+  m_GameObject: {fileID: 860940705}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 47.60191, y: 52.48017, z: 17.561878}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -930,9 +930,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e1b0d3d3ca189b4a9e07668e7556568, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scrollSpeed: 5
+  minZ: -10
+  maxZ: -40
   dragSpeed: 0.1
   smoothTime: 0.2
   Maps: {fileID: 1926658919}
+  focusCamOnMom: 0
+  camTarget: {fileID: 0}
 --- !u!1 &1926658919
 GameObject:
   m_ObjectHideFlags: 0
@@ -962,6 +967,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c5afd26b85ae814ea782555e6aa5591, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Ants: {fileID: 860940705}
   Width: 50
   Height: 50
   Prefabs:
@@ -974,6 +980,7 @@ MonoBehaviour:
   - {fileID: 8823496694561933572, guid: 80a971d9bbe76cc4bb84efc7da18f44b, type: 3}
   roomCenters: []
   MomCenter: {x: 0, y: 0}
+  momModel: {fileID: 3917952994034785811, guid: 8116b85e1ba4feb46a30082a0f788101, type: 3}
 --- !u!4 &1926658921
 Transform:
   m_ObjectHideFlags: 0
@@ -1234,7 +1241,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ant:
   - {fileID: 5577750509827519726, guid: ffdb3f2f5302ed74caee831a720376e6, type: 3}
-  AntsParent: {fileID: 836690591}
+  AntsParent: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1247,4 +1254,4 @@ SceneRoots:
   - {fileID: 1152145448}
   - {fileID: 1612021725}
   - {fileID: 2070671067}
-  - {fileID: 836690592}
+  - {fileID: 860940706}

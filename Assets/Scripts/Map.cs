@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class Map : MonoBehaviour
 {
-    public static Map instance;
-    public int Width, Height;
-    public Hex[,] HexMap;
-    public GameObject[] Prefabs;
-    public GameObject[] PrefabsBG;
-    public float[,] NestStructure;
-    public List<Vector2Int> roomCenters;
-    public string[,] Biom; // Normal, Mom
-    public Vector2Int MomCenter; // Mother Center Position
+    [Header("Settings")]
+    [SerializeField] public static Map instance;
+    [SerializeField] public GameObject Ants;
+    [SerializeField] public int Width, Height;
+    [SerializeField] public Hex[,] HexMap;
+    [SerializeField] public GameObject[] Prefabs;
+    [SerializeField] public GameObject[] PrefabsBG;
+    [SerializeField] public float[,] NestStructure;
+    [SerializeField] public List<Vector2Int> roomCenters;
+    [SerializeField] public string[,] Biom; // Normal, Mom
+    [SerializeField] public Vector2Int MomCenter; // Mother Center Position
+
+    [Header("Mom")]
+    [SerializeField] public GameObject momModel;
+
 
 
     private void Awake()
@@ -29,12 +35,13 @@ public class Map : MonoBehaviour
     {
         instance = this;
         
+
     }
     void GenerateMap()
     {
 
-        HexMap = new Hex[Width, Height];
 
+        HexMap = new Hex[Width, Height];
         for (int x = 0; x < Width; x++)
         {
             for (int y = 0; y < Height; y++)
@@ -76,7 +83,7 @@ public class Map : MonoBehaviour
                     //Dirt
                     else
                     {
-                      
+
                         if (Biom[x, y] == "Mom")
                         {
                             HexMap[x, y] = new Hex(new Vector3(x, y, NestStructure[x, y]), PrefabsBG[2], this.gameObject);
@@ -85,19 +92,19 @@ public class Map : MonoBehaviour
                         {
                             HexMap[x, y] = new Hex(new Vector3(x, y, NestStructure[x, y]), PrefabsBG[1], this.gameObject);
                         }
-                        
+
 
                     }
                 }
-               
+
 
 
             }
         }
         Debug.Log("Liczba Pokoji:" + NestCount());
-        
-        
-        
+
+
+
 
     }
     void GenerateStartNest()
@@ -155,8 +162,8 @@ public class Map : MonoBehaviour
                 }
             }
 
-           
-           
+
+
 
         }
 
@@ -165,21 +172,37 @@ public class Map : MonoBehaviour
 
 
     }
-        void CreateRoom(int cx, int cy, int w, int h)
+    void CreateRoom(int cx, int cy, int w, int h)
+    {
+        for (int dx = -w / 2; dx <= w / 2; dx++)
         {
-            for (int dx = -w / 2; dx <= w / 2; dx++)
+            for (int dy = -h / 2; dy <= h / 2; dy++)
             {
-                for (int dy = -h / 2; dy <= h / 2; dy++)
+                int nx = cx + dx;
+                int ny = cy + dy;
+                if (nx > 0 && nx < Width && ny > 0 && ny < Height)
                 {
-                    int nx = cx + dx;
-                    int ny = cy + dy;
-                    if (nx > 0 && nx < Width && ny > 0 && ny < Height)
-                    {
-                        NestStructure[nx, ny] = 0.9f;
-                    }
+                    NestStructure[nx, ny] = 0.9f;
                 }
             }
         }
+    }
+    void spawnMom()
+    {
+        var positionMom = new Vector3(MomCenter.x, MomCenter.y,1f);
+        if (MomCenter.y % 2 == 0)
+        {
+            positionMom = new Vector3(MomCenter.x * Mathf.Sqrt(3), MomCenter.y * 1.5f, 0.4f);
+
+        }
+        else
+        {
+            positionMom = new Vector3((MomCenter.x * Mathf.Sqrt(3)) + (Mathf.Sqrt(3) / 2), MomCenter.y * 1.5f, 0.4f);
+
+        }
+        
+        var mom = Instantiate(momModel, new Vector3(positionMom.x, positionMom.y, positionMom.z ),new Quaternion(0f,-90f,90f,0f), Ants.transform);
+    }
     void CreateMomBiom()
     {
         Vector2Int RndNest = new Vector2Int(Width / 2, Height - 1);
@@ -239,6 +262,7 @@ public class Map : MonoBehaviour
                 }
             }
         }
+        spawnMom();
 
     }
     int NestCount()

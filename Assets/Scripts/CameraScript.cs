@@ -17,6 +17,8 @@ public class CameraScript : MonoBehaviour
     private Vector3 velocity = Vector3.zero;
     private Vector3 targetPosition;
     public GameObject Maps;
+    public bool focusCamOnMom = false;
+    public GameObject camTarget;
 
 
 
@@ -31,6 +33,7 @@ public class CameraScript : MonoBehaviour
         yield return new WaitForSeconds(1.2f);
         targetPosition = new Vector3(Maps.GetComponent<Map>().HexMap[Maps.GetComponent<Map>().MomCenter.x, Maps.GetComponent<Map>().MomCenter.y]._position.x, Maps.GetComponent<Map>().HexMap[Maps.GetComponent<Map>().MomCenter.x, Maps.GetComponent<Map>().MomCenter.y]._position.y, -30f);
     }
+   
     void Update()
     {
         float scroll = Input.GetAxis("Mouse ScrollWheel");
@@ -48,29 +51,39 @@ public class CameraScript : MonoBehaviour
             else if(scroll < 0f && transform.position.z >= maxZ)
             {
                 targetPosition = new Vector3(targetPosition.x, targetPosition.y, targetPosition.z - scrollSpeed);
-                if (targetPosition.z > maxZ)
+                if (targetPosition.z < maxZ)
                 {
                     targetPosition.z = maxZ;
                 }
             }
         }
-        if (Input.GetMouseButtonDown(0))
+        if (focusCamOnMom == true)
         {
-            dragOrigin = Input.mousePosition;
+            targetPosition = new Vector3(camTarget.transform.position.x, camTarget.transform.position.y, targetPosition.z);
+            if (Input.GetMouseButtonDown(0) || Input.GetMouseButton(0))
+            {
+                focusCamOnMom = false;
+            }
         }
+        if(focusCamOnMom == false) {
+            if (Input.GetMouseButtonDown(0))
+            {
+                dragOrigin = Input.mousePosition;
+            }
 
-        if (Input.GetMouseButton(0))
-        {
-            Vector3 currentMousePos = Input.mousePosition;
-            Vector3 difference = dragOrigin - currentMousePos;
+            if (Input.GetMouseButton(0))
+            {
+                Vector3 currentMousePos = Input.mousePosition;
+                Vector3 difference = dragOrigin - currentMousePos;
 
-            // Przesuwanie w XY
-            Vector3 move = new Vector3(difference.x, difference.y, 0) * dragSpeed;
-            targetPosition += move;
+                // Przesuwanie w XY
+                Vector3 move = new Vector3(difference.x, difference.y, 0) * dragSpeed;
+                targetPosition += move;
 
-            dragOrigin = currentMousePos;
+                dragOrigin = currentMousePos;
+            }
+
         }
-
         // P³ynne przesuwanie do targetPosition (uwzglêdnia teraz zoom)
         transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
     }
